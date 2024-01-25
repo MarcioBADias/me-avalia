@@ -1,6 +1,15 @@
+import { useState } from 'react'
 import LogoIMG from '../img/logo-me-avalia.png'
+import { useEffect } from 'react'
 
 const App = () => {
+  const [dataFilm, setDataFilm] = useState([])
+
+  useEffect(() => {
+    fetch('https://raw.githubusercontent.com/MarcioBADias/data-fake/main/fake-mbd.json')
+    .then(r => r.json()).then(data => setDataFilm(data)).catch(console.log)
+  }, [])
+  console.log(dataFilm)
   return (
     <>
       <nav className="nav-bar">
@@ -9,19 +18,23 @@ const App = () => {
           <input type="text" className="search" placeholder='Buscar filmes...'/>
           <button className="btn-search">Buscar</button>
         </form>
-        <p className="num-results"><strong>5</strong> Resuldatos</p>
+        <p className="num-results"><strong>{dataFilm.length}</strong> Resuldatos</p>
       </nav>
       <section className="main">
         <div className="box">
           <button className="btn-toggle">-</button>
           <ul className="list">
-            <li>
-              <img src="#" alt="" />
-              <h3>Filme</h3>
-              <div>
-                <p>📅 2023</p>
-              </div>
-            </li>
+            {
+              dataFilm?.map(film => (
+                <li key={film.imdbID}>
+                <img src={film.Poster} alt="" />
+                <h3>{film.Title}</h3>
+                <div>
+                  <p>📅 {film.Year}</p>
+                </div>
+              </li>
+              ))
+            }
           </ul>
         </div>
         <div className="box">
