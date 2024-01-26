@@ -1,24 +1,40 @@
 import { useState } from 'react'
 import LogoIMG from '../img/logo-me-avalia.png'
-import { useEffect } from 'react'
 
 const App = () => {
   const [dataFilm, setDataFilm] = useState([])
+  const [searchMovie, setSearchMovie] = useState('')
 
-  useEffect(() => {
-    fetch('https://raw.githubusercontent.com/MarcioBADias/data-fake/main/fake-mbd.json')
-    .then(r => r.json()).then(data => setDataFilm(data)).catch(console.log)
-  }, [])
-  console.log(dataFilm)
+  const getMovieData = () => {
+    if(searchMovie === ''){
+      setDataFilm([])
+      return
+    }
+
+    fetch(`https://www.omdbapi.com/?apikey=a158555c&s=${searchMovie}&page=1`)
+    .then(r => r.json()).then(data => setDataFilm(data['Search'])).catch(console.log)
+  }
+
+  const handleChangeSearch = e => {
+    setSearchMovie(e.target.value)
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    
+    getMovieData()
+    setSearchMovie('')
+  }
+
   return (
     <>
       <nav className="nav-bar">
         <img src={LogoIMG} className="logo" alt="Logo Me Avalia" />
-        <form className="form-search">
-          <input type="text" className="search" placeholder='Buscar filmes...'/>
+        <form className="form-search" onSubmit={handleSubmit}>
+          <input type="text" className="search" value={searchMovie} onChange={handleChangeSearch} placeholder='Buscar filmes...'/>
           <button className="btn-search">Buscar</button>
         </form>
-        <p className="num-results"><strong>{dataFilm.length}</strong> Resuldatos</p>
+        <p className="num-results"><strong>{dataFilm? dataFilm.length : 0}</strong> Resuldatos</p>
       </nav>
       <section className="main">
         <div className="box">
