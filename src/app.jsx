@@ -4,6 +4,7 @@ import LogoIMG from '../img/logo-me-avalia.png'
 const App = () => {
   const [dataFilm, setDataFilm] = useState([])
   const [searchMovie, setSearchMovie] = useState('')
+  const [movieTitle, setMovieTitle] = useState('')
 
   const getMovieData = () => {
     if(searchMovie === ''){
@@ -12,6 +13,11 @@ const App = () => {
     }
 
     fetch(`https://www.omdbapi.com/?apikey=a158555c&s=${searchMovie}&page=1`)
+    .then(r => r.json()).then(data => setDataFilm(data['Search'])).catch(console.log)
+  }
+
+  const getMovieDetails = () => {
+    fetch(`https://www.omdbapi.com/?apikey=a158555c&t=${movieTitle}`)
     .then(r => r.json()).then(data => setDataFilm(data['Search'])).catch(console.log)
   }
 
@@ -26,6 +32,11 @@ const App = () => {
     setSearchMovie('')
   }
 
+  const handleClick = e => {
+    setMovieTitle(e.target)
+    getMovieDetails()
+  }
+
   return (
     <>
       <nav className="nav-bar">
@@ -37,7 +48,7 @@ const App = () => {
         <p className="num-results"><strong>{dataFilm? dataFilm.length : 0}</strong> Resuldatos</p>
       </nav>
       <section className="main">
-        <div className="box">
+        <div className="box" onClick={handleClick}>
           <button className="btn-toggle">-</button>
           <ul className="list">
             {
@@ -56,6 +67,7 @@ const App = () => {
         <div className="box">
           <button className="btn-toggle">-</button>
           <div className="summary">
+            <img src={movieTitle?.Poster} alt="" />
             <h2>Filmes assistidos</h2>
             <p>#️⃣ 0 filmes ⏳ 0 min</p>
           </div>
