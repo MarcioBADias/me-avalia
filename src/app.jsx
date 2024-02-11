@@ -4,6 +4,7 @@ import LogoIMG from '../img/logo-me-avalia.png'
 const App = () => {
   const [dataFilm, setDataFilm] = useState([])
   const [clickedMovie, setClickedMovie] = useState(null)
+  const [wacthedMovies, setWacthedMovies] = useState([])
   //const [searchMovie, setSearchMovie] = useState('')
   //const [movieTitle, setMovieTitle] = useState('')
 
@@ -79,11 +80,22 @@ const App = () => {
     getMovieDetails()
   } */
 
+  const handleClickBtnDelete = (id) =>
+    setWacthedMovies((prev) => prev.filter((p) => p.id !== id))
   const handleClickBtnBack = () => setClickedMovie(null)
   const handleClickMovie = (clickedMovie) =>
     setClickedMovie((prev) =>
       prev?.id === clickedMovie.id ? null : clickedMovie,
     )
+  const handleClickSubmitRating = (e) => {
+    e.preventDefault()
+    const { rating } = e.target.elements
+    setWacthedMovies((prev) => [
+      ...prev,
+      { ...clickedMovie, userRating: rating.value },
+    ])
+    setClickedMovie(null)
+  }
 
   return (
     <>
@@ -156,7 +168,22 @@ const App = () => {
 
               <section>
                 <div className="rating">
-                  <div>Avaliação do filme</div>
+                  <form
+                    onSubmit={handleClickSubmitRating}
+                    className="form-rating"
+                  >
+                    <p>Qual nota você dá a este filme?</p>
+                    <div>
+                      <select name="rating" defaultValue={1}>
+                        {Array.from({ length: 10 }, (_, i) => (
+                          <option key={i} value={i + 1}>
+                            {i + 1}
+                          </option>
+                        ))}
+                      </select>
+                      <button className="btn-add">+ adicionar à lista</button>
+                    </div>
+                  </form>
                 </div>
                 <p>
                   <em>{clickedMovie.plot}</em>
@@ -183,25 +210,35 @@ const App = () => {
                 </div>
               </div>
               <ul className="list">
-                <li>
-                  <img src="" alt="" />
-                  <h3>Matrix</h3>
-                  <div>
-                    <p>
-                      <span>⭐</span>
-                      <span>5.0</span>
-                    </p>
-                    <p>
-                      <span>🌟</span>
-                      <span>10</span>
-                    </p>
-                    <p>
-                      <span>⏳</span>
-                      <span>00 min</span>
-                    </p>
-                    <button className="btn-delete">x</button>
-                  </div>
-                </li>
+                {wacthedMovies.map((movie) => (
+                  <li key={movie.id}>
+                    <img
+                      src={movie.poster}
+                      alt={`Poster do filme ${movie.title}`}
+                    />
+                    <h3>{movie.title}</h3>
+                    <div>
+                      <p>
+                        <span>⭐</span>
+                        <span>{movie.imdbRate}</span>
+                      </p>
+                      <p>
+                        <span>🌟</span>
+                        <span>{movie.userRating}</span>
+                      </p>
+                      <p>
+                        <span>⏳</span>
+                        <span>{movie.runtime}</span>
+                      </p>
+                      <button
+                        onClick={() => handleClickBtnDelete(movie.id)}
+                        className="btn-delete"
+                      >
+                        x
+                      </button>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </>
           )}
