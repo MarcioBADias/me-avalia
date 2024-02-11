@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import LogoIMG from '../img/logo-me-avalia.png'
 
+const getTotalMinutes = (wacthedMovies) =>
+  wacthedMovies.reduce((acc, item) => acc + +item.runtime.split(' ')[0], 0)
+
 const App = () => {
   const [dataFilm, setDataFilm] = useState([])
   const [clickedMovie, setClickedMovie] = useState(null)
@@ -201,11 +204,11 @@ const App = () => {
                 <div>
                   <p>
                     <span>#️⃣</span> {''}
-                    <span>0 filmes</span>
+                    <span>{wacthedMovies.length} filmes</span>
                   </p>
                   <p>
                     <span>⏳</span> {''}
-                    <span>00 min</span>
+                    <span>{getTotalMinutes(wacthedMovies)} min</span>
                   </p>
                 </div>
               </div>
