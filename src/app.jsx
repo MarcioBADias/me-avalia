@@ -124,24 +124,18 @@ const App = () => {
         <div className="box" /*onClick={handleClick}*/>
           <button className="btn-toggle">-</button>
           <ul className="list">
-            {dataFilm.map(
-              (film, i) =>
-                i < 3 && (
-                  <li key={film.id} onClick={() => handleClickMovie(film)}>
-                    <img
-                      src={film.poster}
-                      alt={`Poster do filme ${film.title}`}
-                    />
-                    <h3>{film.title}</h3>
-                    <div>
-                      <p>
-                        <span>📅</span>
-                        <span>{film.year}</span>
-                      </p>
-                    </div>
-                  </li>
-                ),
-            )}
+            {dataFilm.map((film) => (
+              <li key={film.id} onClick={() => handleClickMovie(film)}>
+                <img src={film.poster} alt={`Poster do filme ${film.title}`} />
+                <h3>{film.title}</h3>
+                <div>
+                  <p>
+                    <span>📅</span>
+                    <span>{film.year}</span>
+                  </p>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="box">
