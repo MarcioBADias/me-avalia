@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import LogoIMG from '../img/logo-me-avalia.png'
+import { SearchMenu } from './components/SearchMenu/searchMenu'
 
 const apiKey = import.meta.env.VITE_API_KEY
 
@@ -96,22 +96,7 @@ const App = () => {
 
   return (
     <>
-      <nav className="nav-bar">
-        <img src={LogoIMG} className="logo" alt="Logo Me Avalia" />
-        <form className="form-search" onSubmit={handleSearchMovie}>
-          <input
-            type="text"
-            className="search"
-            name="searchMovie"
-            placeholder="Buscar filmes..."
-            autoFocus
-          />
-          <button className="btn-search">Buscar</button>
-        </form>
-        <p className="num-results">
-          <strong>{dataFilm ? dataFilm.length : 0}</strong> Resuldatos
-        </p>
-      </nav>
+      <SearchMenu movie={dataFilm} onSearchMovier={handleSearchMovie} />
 
       <main className="main">
         <div className="box">
