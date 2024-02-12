@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { SearchMenu } from './components/SearchMenu/searchMenu'
 import { ListBox } from './components/ListBox/listBox'
-import { HistoricMovies } from './components/HistoricMovies/historicMovies'
 import { MoviesList } from './components/MoviesList/moviesList'
+import { HistoricMoviesData } from './components/HistoricMoviesData/historicMoviesData'
+import { HistoricMoviesList } from './components/HistoricMoviesList/historicMoviesList'
 
 const apiKey = import.meta.env.VITE_API_KEY
 
@@ -153,38 +154,11 @@ const App = () => {
           ) : (
             <>
               <button className="btn-toggle">-</button>
-              <HistoricMovies wacthedMovies={wacthedMovies} />
-              <ul className="list">
-                {wacthedMovies.map((movie) => (
-                  <li key={movie.id}>
-                    <img
-                      src={movie.poster}
-                      alt={`Poster do filme ${movie.title}`}
-                    />
-                    <h3>{movie.title}</h3>
-                    <div>
-                      <p>
-                        <span>⭐</span>
-                        <span>{movie.imdbRate}</span>
-                      </p>
-                      <p>
-                        <span>🌟</span>
-                        <span>{movie.userRating}</span>
-                      </p>
-                      <p>
-                        <span>⏳</span>
-                        <span>{movie.runtime}</span>
-                      </p>
-                      <button
-                        onClick={() => handleClickBtnDelete(movie.id)}
-                        className="btn-delete"
-                      >
-                        x
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <HistoricMoviesData wacthedMovies={wacthedMovies} />
+              <HistoricMoviesList
+                wacthedMovies={wacthedMovies}
+                onClickBtnDelete={handleClickBtnDelete}
+              />
             </>
           )}
         </ListBox>

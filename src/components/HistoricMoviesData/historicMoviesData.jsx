@@ -5,7 +5,7 @@ const getTotalMinutes = (wacthedMovies) =>
     0,
   )
 
-const HistoricMovies = ({ wacthedMovies }) => (
+const HistoricMoviesData = ({ wacthedMovies }) => (
   <div className="summary">
     <img src="#" alt="" />
     <h2>Filmes assistidos</h2>
@@ -22,4 +22,4 @@ const HistoricMovies = ({ wacthedMovies }) => (
   </div>
 )
 
-export { HistoricMovies }
+export { HistoricMoviesData }
