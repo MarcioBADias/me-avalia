@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SearchMenu } from './components/SearchMenu/searchMenu'
+import { ListBox } from './components/ListBox/listBox'
 
 const apiKey = import.meta.env.VITE_API_KEY
 
@@ -99,7 +100,7 @@ const App = () => {
       <SearchMenu movies={dataFilm} onSearchMovie={handleSearchMovie} />
 
       <main className="main">
-        <div className="box">
+        <ListBox>
           <button className="btn-toggle">-</button>
           <ul className="list">
             {dataFilm.map((film) => (
@@ -115,8 +116,8 @@ const App = () => {
               </li>
             ))}
           </ul>
-        </div>
-        <div className="box">
+        </ListBox>
+        <ListBox>
           {clickedMovie ? (
             <div className="details">
               <header>
@@ -217,7 +218,7 @@ const App = () => {
               </ul>
             </>
           )}
-        </div>
+        </ListBox>
       </main>
     </>
   )
