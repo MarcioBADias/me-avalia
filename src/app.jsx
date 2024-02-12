@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { SearchMenu } from './components/SearchMenu/searchMenu'
-import { ListBox } from './components/ListBox/listBox'
-import { MoviesList } from './components/MoviesList/moviesList'
-import { HistoricMoviesData } from './components/HistoricMoviesData/historicMoviesData'
-import { HistoricMoviesList } from './components/HistoricMoviesList/historicMoviesList'
+import { SearchMenu } from './components/SearchMenu'
+import { ListBox } from './components/ListBox'
+import { MoviesList } from './components/MoviesList'
+import { HistoricMoviesData } from './components/HistoricMoviesData'
+import { HistoricMoviesList } from './components/HistoricMoviesList'
+import { ResumeHeader } from './components/MovieResumeHeader'
+import { MovieResume } from './components/MovieResume'
 
 const apiKey = import.meta.env.VITE_API_KEY
 
@@ -103,53 +105,15 @@ const App = () => {
         <ListBox>
           {clickedMovie ? (
             <div className="details">
-              <header>
-                <button className="btn-back" onClick={handleClickBtnBack}>
-                  {' '}
-                  &larr;
-                </button>
-                <img
-                  src={clickedMovie.poster}
-                  alt={`Poster do filme ${clickedMovie.title}`}
-                />
-                <div className="details-overview">
-                  <h2>{clickedMovie.title}</h2>
-                  <p>
-                    {clickedMovie.released} &bull; {clickedMovie.runtime}
-                  </p>
-                  <p>{clickedMovie.genre}</p>
-                  <p>
-                    <span>⭐</span>
-                    {clickedMovie.imdbRate} IMDB rating
-                  </p>
-                </div>
-              </header>
+              <ResumeHeader
+                clickedMovie={clickedMovie}
+                onClickBtmBack={handleClickBtnBack}
+              />
 
-              <section>
-                <div className="rating">
-                  <form
-                    onSubmit={handleClickSubmitRating}
-                    className="form-rating"
-                  >
-                    <p>Qual nota você dá a este filme?</p>
-                    <div>
-                      <select name="rating" defaultValue={1}>
-                        {Array.from({ length: 10 }, (_, i) => (
-                          <option key={i} value={i + 1}>
-                            {i + 1}
-                          </option>
-                        ))}
-                      </select>
-                      <button className="btn-add">+ adicionar à lista</button>
-                    </div>
-                  </form>
-                </div>
-                <p>
-                  <em>{clickedMovie.plot}</em>
-                </p>
-                <p>Elenco: {clickedMovie.actors}</p>
-                <p>Direção: {clickedMovie.director}</p>
-              </section>
+              <MovieResume
+                clickedMovie={clickedMovie}
+                onSubmitRating={handleClickSubmitRating}
+              />
             </div>
           ) : (
             <>
