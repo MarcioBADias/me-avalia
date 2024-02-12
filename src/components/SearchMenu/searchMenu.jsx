@@ -1,6 +1,4 @@
-import React from 'react'
-
-const SearchMenu = (movie, onSearchMovie) => (
+const SearchMenu = ({ movies, onSearchMovie }) => (
   <nav className="nav-bar">
     <img src="logo-me-avalia.png" className="logo" alt="Logo Me Avalia" />
     <form className="form-search" onSubmit={onSearchMovie}>
@@ -14,7 +12,7 @@ const SearchMenu = (movie, onSearchMovie) => (
       <button className="btn-search">Buscar</button>
     </form>
     <p className="num-results">
-      <strong>{movie ? movie.length : 0}</strong> Resuldatos
+      <strong>{movies ? movies.length : 0}</strong> Resuldatos
     </p>
   </nav>
 )

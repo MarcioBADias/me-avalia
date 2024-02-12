@@ -96,7 +96,7 @@ const App = () => {
 
   return (
     <>
-      <SearchMenu movie={dataFilm} onSearchMovier={handleSearchMovie} />
+      <SearchMenu movies={dataFilm} onSearchMovie={handleSearchMovie} />
 
       <main className="main">
         <div className="box">
