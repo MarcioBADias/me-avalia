@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react'
 import { SearchMenu } from './components/SearchMenu/searchMenu'
 import { ListBox } from './components/ListBox/listBox'
+import { HistoricMovies } from './components/HistoricMovies/historicMovies'
+import { MoviesList } from './components/MoviesList/moviesList'
 
 const apiKey = import.meta.env.VITE_API_KEY
-
-const getTotalMinutes = (wacthedMovies) =>
-  wacthedMovies.reduce(
-    (acc, item) =>
-      acc + (item.runtime === 'N/A' ? 0 : +item.runtime.split(' ')[0]),
-    0,
-  )
 
 const App = () => {
   const [dataFilm, setDataFilm] = useState([])
@@ -102,20 +97,7 @@ const App = () => {
       <main className="main">
         <ListBox>
           <button className="btn-toggle">-</button>
-          <ul className="list">
-            {dataFilm.map((film) => (
-              <li key={film.id} onClick={() => handleClickedMovie(film)}>
-                <img src={film.poster} alt={`Poster do filme ${film.title}`} />
-                <h3>{film.title}</h3>
-                <div>
-                  <p>
-                    <span>📅</span>
-                    <span>{film.year}</span>
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <MoviesList movies={dataFilm} onClickedMovie={handleClickedMovie} />
         </ListBox>
         <ListBox>
           {clickedMovie ? (
@@ -171,20 +153,7 @@ const App = () => {
           ) : (
             <>
               <button className="btn-toggle">-</button>
-              <div className="summary">
-                <img src="#" alt="" />
-                <h2>Filmes assistidos</h2>
-                <div>
-                  <p>
-                    <span>#️⃣</span> {''}
-                    <span>{wacthedMovies.length} filmes</span>
-                  </p>
-                  <p>
-                    <span>⏳</span> {''}
-                    <span>{getTotalMinutes(wacthedMovies)} min</span>
-                  </p>
-                </div>
-              </div>
+              <HistoricMovies wacthedMovies={wacthedMovies} />
               <ul className="list">
                 {wacthedMovies.map((movie) => (
                   <li key={movie.id}>
