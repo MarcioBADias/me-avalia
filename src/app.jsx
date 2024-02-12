@@ -4,7 +4,11 @@ import LogoIMG from '../img/logo-me-avalia.png'
 const apiKey = import.meta.env.VITE_API_KEY
 
 const getTotalMinutes = (wacthedMovies) =>
-  wacthedMovies.reduce((acc, item) => acc + +item.runtime.split(' ')[0], 0)
+  wacthedMovies.reduce(
+    (acc, item) =>
+      acc + (item.runtime === 'N/A' ? 0 : +item.runtime.split(' ')[0]),
+    0,
+  )
 
 const App = () => {
   const [dataFilm, setDataFilm] = useState([])
