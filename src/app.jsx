@@ -4,8 +4,7 @@ import { ListBox } from './components/ListBox'
 import { MoviesList } from './components/MoviesList'
 import { HistoricMoviesData } from './components/HistoricMoviesData'
 import { HistoricMoviesList } from './components/HistoricMoviesList'
-import { ResumeHeader } from './components/MovieResumeHeader'
-import { MovieResume } from './components/MovieResume'
+import { MovieDetails } from './components/MovieDetails'
 
 const apiKey = import.meta.env.VITE_API_KEY
 
@@ -104,25 +103,21 @@ const App = () => {
         </ListBox>
         <ListBox>
           {clickedMovie ? (
-            <div className="details">
-              <ResumeHeader
-                clickedMovie={clickedMovie}
-                onClickBtmBack={handleClickBtnBack}
-              />
-
-              <MovieResume
-                clickedMovie={clickedMovie}
-                onSubmitRating={handleClickSubmitRating}
-              />
-            </div>
+            <MovieDetails
+              clickedMovie={clickedMovie}
+              onClickBtmBack={handleClickBtnBack}
+              onSubmitRating={handleClickSubmitRating}
+            />
           ) : (
             <>
               <button className="btn-toggle">-</button>
               <HistoricMoviesData wacthedMovies={wacthedMovies} />
-              <HistoricMoviesList
-                wacthedMovies={wacthedMovies}
-                onClickBtnDelete={handleClickBtnDelete}
-              />
+              {wacthedMovies.length > 0 && (
+                <HistoricMoviesList
+                  wacthedMovies={wacthedMovies}
+                  onClickBtnDelete={handleClickBtnDelete}
+                />
+              )}
             </>
           )}
         </ListBox>
