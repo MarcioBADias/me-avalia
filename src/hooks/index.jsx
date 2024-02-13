@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 
 const apiKey = import.meta.env.VITE_API_KEY
+const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
 
 const useMovies = () => {
   const [movies, setMovies] = useState([])
 
   useEffect(() => {
-    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=Matrix`)
+    fetch(`${baseUrl}&s=Matrix`)
       .then((r) => r.json())
       .then((data) =>
         setMovies(
@@ -18,7 +19,7 @@ const useMovies = () => {
           })),
         ),
       )
-      .catch(console.log)
+      .catch((error) => alert(error.message))
   }, [])
 
   const handleSearchMovie = (e) => {
@@ -29,7 +30,7 @@ const useMovies = () => {
       return
     }
 
-    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${searchMovie.value}`)
+    fetch(`${baseUrl}&s=${searchMovie.value}`)
       .then((r) => r.json())
       .then((data) =>
         setMovies(
@@ -41,7 +42,7 @@ const useMovies = () => {
           })),
         ),
       )
-      .catch(console.log)
+      .catch((error) => alert(error.message))
   }
 
   return { movies, handleSearchMovie }
@@ -66,9 +67,7 @@ const useClickedMovie = (setWacthedMovies) => {
       setClickedMovie(null)
     }
 
-    fetch(
-      `https://www.omdbapi.com/?apikey=${apiKey}&i=${currentClickedMovie.id}`,
-    )
+    fetch(`${baseUrl}&i=${currentClickedMovie.id}`)
       .then((r) => r.json())
       .then((movie) =>
         setClickedMovie({
@@ -85,7 +84,7 @@ const useClickedMovie = (setWacthedMovies) => {
           genre: movie.Genre,
         }),
       )
-      .catch(console.log)
+      .catch((error) => alert(error.message))
   }
   const handleClickSubmitRating = (e) => {
     e.preventDefault()
