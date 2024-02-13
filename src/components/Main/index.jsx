@@ -5,9 +5,7 @@ import { ListBox } from '../ListBox'
 import { MovieDetails } from '../MovieDetails'
 import { MoviesList } from '../MoviesList'
 
-const apiKey = import.meta.env.VITE_API_KEY
-
-const Main = ({ movie }) => {
+const Main = ({ movie, apiKey }) => {
   const [clickedMovie, setClickedMovie] = useState(null)
   const [wacthedMovies, setWacthedMovies] = useState([])
 

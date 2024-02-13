@@ -49,7 +49,7 @@ const App = () => {
   return (
     <>
       <SearchMenu movies={movies} onSearchMovie={handleSearchMovie} />
-      <Main movie={movies} />
+      <Main movie={movies} apiKey={apiKey} />
     </>
   )
 }
