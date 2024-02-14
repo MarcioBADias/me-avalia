@@ -43,6 +43,8 @@ const useMovies = () => {
         ),
       )
       .catch((error) => alert(error.message))
+
+    searchMovie.value = ''
   }
 
   return { movies, handleSearchMovie }
