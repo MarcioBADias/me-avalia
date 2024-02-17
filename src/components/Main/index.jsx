@@ -14,7 +14,7 @@ const Main = ({ movie }) => {
     handleClickBtnBack,
     handleClickedMovie,
     handleClickSubmitRating,
-  } = useClickedMovie(setWacthedMovies)
+  } = useClickedMovie(wacthedMovies, setWacthedMovies)
 
   return (
     <main className="main">

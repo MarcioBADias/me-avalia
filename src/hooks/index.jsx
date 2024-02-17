@@ -59,7 +59,7 @@ const useWatchedMovies = () => {
   return { wacthedMovies, setWacthedMovies, handleClickBtnDelete }
 }
 
-const useClickedMovie = (setWacthedMovies) => {
+const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
   const [clickedMovie, setClickedMovie] = useState(null)
 
   const handleClickBtnBack = () => setClickedMovie(null)
@@ -91,10 +91,12 @@ const useClickedMovie = (setWacthedMovies) => {
   const handleClickSubmitRating = (e) => {
     e.preventDefault()
     const { rating } = e.target.elements
-    setWacthedMovies((prev) => [
-      ...prev,
-      { ...clickedMovie, userRating: rating.value },
-    ])
+    wacthedMovies.map((movie) => movie.id).includes(clickedMovie.id)
+      ? setClickedMovie(null)
+      : setWacthedMovies((prev) => [
+          ...prev,
+          { ...clickedMovie, userRating: rating.value },
+        ])
     setClickedMovie(null)
   }
 
