@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import localforage from 'localforage'
 
 const apiKey = import.meta.env.VITE_API_KEY
 const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
@@ -8,10 +9,8 @@ const useMovies = () => {
   const movieRef = useRef(null)
 
   useEffect(() => {
-    if (movies.length === 0) {
-      return
-    }
-    movieRef.current.reset()
+    movieRef.current.elements.searchMovie.value.length > 0 &&
+      movieRef.current.reset()
   }, [movies])
 
   useEffect(() => {
@@ -60,6 +59,23 @@ const useMovies = () => {
 
 const useWatchedMovies = () => {
   const [wacthedMovies, setWacthedMovies] = useState([])
+
+  useEffect(() => {
+    localforage
+      .setItem('filmesAssistidos', wacthedMovies)
+      .catch((error) => alert(error))
+  }, [wacthedMovies])
+
+  useEffect(() => {
+    localforage
+      .getItem('filmesAssistidos')
+      .then((value) => {
+        if (value) {
+          setWacthedMovies(value)
+        }
+      })
+      .catch((error) => alert(error))
+  }, [])
 
   const handleClickBtnDelete = (id) =>
     setWacthedMovies((prev) => prev.filter((p) => p.id !== id))
