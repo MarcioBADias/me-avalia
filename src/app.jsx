@@ -3,11 +3,15 @@ import { SearchMenu } from './components/SearchMenu'
 import { Main } from './components/Main'
 
 const App = () => {
-  const { movies, handleSearchMovie } = useMovies()
+  const { movies, movieRef, handleSearchMovie } = useMovies()
 
   return (
     <>
-      <SearchMenu movies={movies} onSearchMovie={handleSearchMovie} />
+      <SearchMenu
+        movieRef={movieRef}
+        movies={movies}
+        onSearchMovie={handleSearchMovie}
+      />
       <Main movie={movies} />
     </>
   )

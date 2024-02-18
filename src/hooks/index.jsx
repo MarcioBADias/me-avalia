@@ -1,10 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 const apiKey = import.meta.env.VITE_API_KEY
 const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
 
 const useMovies = () => {
   const [movies, setMovies] = useState([])
+  const movieRef = useRef(null)
+
+  useEffect(() => {
+    if (movies.length === 0) {
+      return
+    }
+    movieRef.current.reset()
+  }, [movies])
 
   useEffect(() => {
     fetch(`${baseUrl}&s=Matrix`)
@@ -47,7 +55,7 @@ const useMovies = () => {
     searchMovie.value = ''
   }
 
-  return { movies, handleSearchMovie }
+  return { movies, movieRef, handleSearchMovie }
 }
 
 const useWatchedMovies = () => {
