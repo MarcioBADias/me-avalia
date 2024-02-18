@@ -99,12 +99,16 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
   const handleClickSubmitRating = (e) => {
     e.preventDefault()
     const { rating } = e.target.elements
-    wacthedMovies.map((movie) => movie.id).includes(clickedMovie.id)
-      ? setClickedMovie(null)
-      : setWacthedMovies((prev) => [
-          ...prev,
-          { ...clickedMovie, userRating: rating.value },
-        ])
+    setWacthedMovies((prev) => {
+      const duplicatedMove = prev.some((movie) => movie.id === clickedMovie.id)
+      return duplicatedMove
+        ? prev.map((m) =>
+            m.id === clickedMovie.id
+              ? { ...clickedMovie, userRating: rating.value }
+              : m,
+          )
+        : [...prev, { ...clickedMovie, userRating: rating.value }]
+    })
     setClickedMovie(null)
   }
 
