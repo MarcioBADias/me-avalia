@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import localforage from 'localforage'
 
 const apiKey = import.meta.env.VITE_API_KEY
 const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
@@ -8,10 +9,8 @@ const useMovies = () => {
   const movieRef = useRef(null)
 
   useEffect(() => {
-    if (movies.length === 0) {
-      return
-    }
-    movieRef.current.reset()
+    movieRef.current.elements.searchMovie.value.length > 0 &&
+      movieRef.current.reset()
   }, [movies])
 
   useEffect(() => {
@@ -61,6 +60,23 @@ const useMovies = () => {
 const useWatchedMovies = () => {
   const [wacthedMovies, setWacthedMovies] = useState([])
 
+  useEffect(() => {
+    localforage
+      .setItem('filmesAssistidos', wacthedMovies)
+      .catch((error) => alert(error))
+  }, [wacthedMovies])
+
+  useEffect(() => {
+    localforage
+      .getItem('filmesAssistidos')
+      .then((value) => {
+        if (value) {
+          setWacthedMovies(value)
+        }
+      })
+      .catch((error) => alert(error))
+  }, [])
+
   const handleClickBtnDelete = (id) =>
     setWacthedMovies((prev) => prev.filter((p) => p.id !== id))
 
@@ -96,15 +112,17 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
       )
       .catch((error) => alert(error.message))
   }
-  const handleClickSubmitRating = (e) => {
-    e.preventDefault()
-    const { rating } = e.target.elements
-    wacthedMovies.map((movie) => movie.id).includes(clickedMovie.id)
-      ? setClickedMovie(null)
-      : setWacthedMovies((prev) => [
-          ...prev,
-          { ...clickedMovie, userRating: rating.value },
-        ])
+  const handleClickRating = (rating) => {
+    setWacthedMovies((prev) => {
+      const duplicatedMove = prev.some((movie) => movie.id === clickedMovie.id)
+      return duplicatedMove
+        ? prev.map((m) =>
+            m.id === clickedMovie.id
+              ? { ...clickedMovie, userRating: rating }
+              : m,
+          )
+        : [...prev, { ...clickedMovie, userRating: rating }]
+    })
     setClickedMovie(null)
   }
 
@@ -113,7 +131,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
     setClickedMovie,
     handleClickBtnBack,
     handleClickedMovie,
-    handleClickSubmitRating,
+    handleClickRating,
   }
 }
 

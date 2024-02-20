@@ -13,7 +13,7 @@ const Main = ({ movie }) => {
     clickedMovie,
     handleClickBtnBack,
     handleClickedMovie,
-    handleClickSubmitRating,
+    handleClickRating,
   } = useClickedMovie(wacthedMovies, setWacthedMovies)
 
   return (
@@ -27,7 +27,7 @@ const Main = ({ movie }) => {
           <MovieDetails
             clickedMovie={clickedMovie}
             onClickBtmBack={handleClickBtnBack}
-            onSubmitRating={handleClickSubmitRating}
+            onClickRating={handleClickRating}
           />
         ) : (
           <>
