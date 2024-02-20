@@ -112,18 +112,16 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
       )
       .catch((error) => alert(error.message))
   }
-  const handleClickSubmitRating = (e) => {
-    e.preventDefault()
-    const { rating } = e.target.elements
+  const handleClickRating = (rating) => {
     setWacthedMovies((prev) => {
       const duplicatedMove = prev.some((movie) => movie.id === clickedMovie.id)
       return duplicatedMove
         ? prev.map((m) =>
             m.id === clickedMovie.id
-              ? { ...clickedMovie, userRating: rating.value }
+              ? { ...clickedMovie, userRating: rating }
               : m,
           )
-        : [...prev, { ...clickedMovie, userRating: rating.value }]
+        : [...prev, { ...clickedMovie, userRating: rating }]
     })
     setClickedMovie(null)
   }
@@ -133,7 +131,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
     setClickedMovie,
     handleClickBtnBack,
     handleClickedMovie,
-    handleClickSubmitRating,
+    handleClickRating,
   }
 }
 
