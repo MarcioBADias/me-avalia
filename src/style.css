@@ -36,6 +36,23 @@ body {
   border-radius: 0.9rem;
 }
 
+@media (max-width: 700px) {
+  .nav-bar {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .form-search {
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .main {
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
 .main {
   margin-top: 2.4rem;
   height: calc(100vh - 7.2rem - 3 * 2.4rem);
