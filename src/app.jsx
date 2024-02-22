@@ -1,6 +1,6 @@
-import { useMovies } from './hooks'
-import { SearchMenu } from './components/SearchMenu'
-import { Main } from './components/Main'
+import { useMovies } from '@/hooks'
+import { SearchMenu } from '@/components/SearchMenu'
+import { Main } from '@/components/Main'
 
 const App = () => {
   const { movies, movieRef, handleSearchMovie } = useMovies()

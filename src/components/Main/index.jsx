@@ -1,9 +1,9 @@
-import { HistoricMoviesData } from '../HistoricMoviesData'
-import { HistoricMoviesList } from '../HistoricMoviesList'
-import { ListBox } from '../ListBox'
-import { MovieDetails } from '../MovieDetails'
-import { MoviesList } from '../MoviesList'
-import { useWatchedMovies, useClickedMovie } from '../../hooks'
+import { HistoricMoviesData } from '@/components/HistoricMoviesData'
+import { HistoricMoviesList } from '@/components/HistoricMoviesList'
+import { ListBox } from '@/components/ListBox'
+import { MovieDetails } from '@/components/MovieDetails'
+import { MoviesList } from '@/components/MoviesList'
+import { useWatchedMovies, useClickedMovie } from '@/hooks'
 
 const Main = ({ movie }) => {
   const { wacthedMovies, setWacthedMovies, handleClickBtnDelete } =

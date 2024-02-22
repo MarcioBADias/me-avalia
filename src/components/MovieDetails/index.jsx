@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RatingStar } from '../StarRating'
+import { RatingStar } from '@/components/StarRating'
 
 const MovieDetails = ({ clickedMovie, onClickBtmBack, onClickRating }) => {
   const [useRating, setUseRating] = useState(null)
