@@ -6,6 +6,7 @@ const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
 
 const useMovies = () => {
   const [movies, setMovies] = useState([])
+  const [loading, setLoading] = useState(false)
   const movieRef = useRef(null)
 
   useEffect(() => {
@@ -14,6 +15,7 @@ const useMovies = () => {
   }, [movies])
 
   useEffect(() => {
+    setLoading(true)
     fetch(`${baseUrl}&s=Matrix`)
       .then((r) => r.json())
       .then((data) =>
@@ -27,6 +29,7 @@ const useMovies = () => {
         ),
       )
       .catch((error) => alert(error.message))
+      .finally(() => setLoading(false))
   }, [])
 
   const handleSearchMovie = (e) => {
@@ -36,7 +39,7 @@ const useMovies = () => {
     if (searchMovie.value.length < 2) {
       return
     }
-
+    setLoading(true)
     fetch(`${baseUrl}&s=${searchMovie.value}`)
       .then((r) => r.json())
       .then((data) =>
@@ -50,11 +53,11 @@ const useMovies = () => {
         ),
       )
       .catch((error) => alert(error.message))
-
+      .finally(() => setLoading(false))
     searchMovie.value = ''
   }
 
-  return { movies, movieRef, handleSearchMovie }
+  return { movies, loading, movieRef, handleSearchMovie }
 }
 
 const useWatchedMovies = () => {
