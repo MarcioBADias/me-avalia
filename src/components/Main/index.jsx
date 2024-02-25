@@ -4,7 +4,7 @@ import { ListBox } from '@/components/ListBox'
 import { MovieDetails } from '@/components/MovieDetails'
 import { MoviesList } from '@/components/MoviesList'
 import { useWatchedMovies, useClickedMovie } from '@/hooks'
-import { Loading } from '../Loading'
+import { Loading } from '@/components/Loading'
 
 const Main = ({ movie, inLoading }) => {
   const { wacthedMovies, setWacthedMovies, handleClickBtnDelete } =

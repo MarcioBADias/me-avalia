@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import localforage from 'localforage'
-
-const apiKey = import.meta.env.VITE_API_KEY
-const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
+import { baseUrl, request } from '@/utils'
 
 const useMovies = () => {
   const [movies, setMovies] = useState([])
@@ -16,9 +14,9 @@ const useMovies = () => {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`${baseUrl}&s=Matrix`)
-      .then((r) => r.json())
-      .then((data) =>
+    request({
+      url: `${baseUrl}&s=Matrix`,
+      onSuccess: (data) =>
         setMovies(
           data.Search.map((movie) => ({
             id: movie.imdbID,
@@ -27,9 +25,8 @@ const useMovies = () => {
             poster: movie.Poster,
           })),
         ),
-      )
-      .catch((error) => alert(error.message))
-      .finally(() => setLoading(false))
+      onFinally: () => setLoading(false),
+    })
   }, [])
 
   const handleSearchMovie = (e) => {
@@ -40,9 +37,9 @@ const useMovies = () => {
       return
     }
     setLoading(true)
-    fetch(`${baseUrl}&s=${searchMovie.value}`)
-      .then((r) => r.json())
-      .then((data) =>
+    request({
+      url: `${baseUrl}&s=${searchMovie.value}`,
+      onSuccess: (data) =>
         setMovies(
           data.Search.map((movie) => ({
             id: movie.imdbID,
@@ -51,9 +48,9 @@ const useMovies = () => {
             poster: movie.Poster,
           })),
         ),
-      )
-      .catch((error) => alert(error.message))
-      .finally(() => setLoading(false))
+      onFinally: () => setLoading(false),
+    })
+
     searchMovie.value = ''
   }
 
@@ -97,9 +94,9 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
       setClickedMovie(null)
     }
     setLoadingDetails(true)
-    fetch(`${baseUrl}&i=${currentClickedMovie.id}`)
-      .then((r) => r.json())
-      .then((movie) =>
+    request({
+      url: `${baseUrl}&i=${currentClickedMovie.id}`,
+      onSuccess: (movie) =>
         setClickedMovie({
           id: movie.imdbID,
           title: movie.Title,
@@ -113,9 +110,8 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
           released: movie.Released,
           genre: movie.Genre,
         }),
-      )
-      .catch((error) => alert(error.message))
-      .finally(() => setLoadingDetails(false))
+      onFinally: setLoadingDetails(false),
+    })
   }
   const handleClickRating = (rating) => {
     setWacthedMovies((prev) => {
