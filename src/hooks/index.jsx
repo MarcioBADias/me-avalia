@@ -88,6 +88,7 @@ const useWatchedMovies = () => {
 
 const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
   const [clickedMovie, setClickedMovie] = useState(null)
+  const [loadingDetails, setLoadingDetails] = useState(false)
 
   const handleClickBtnBack = () => setClickedMovie(null)
   const handleClickedMovie = (currentClickedMovie) => {
@@ -95,7 +96,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
     if (prevCLickedMove?.id === currentClickedMovie.id) {
       setClickedMovie(null)
     }
-
+    setLoadingDetails(true)
     fetch(`${baseUrl}&i=${currentClickedMovie.id}`)
       .then((r) => r.json())
       .then((movie) =>
@@ -114,6 +115,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
         }),
       )
       .catch((error) => alert(error.message))
+      .finally(() => setLoadingDetails(false))
   }
   const handleClickRating = (rating) => {
     setWacthedMovies((prev) => {
@@ -131,6 +133,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
 
   return {
     clickedMovie,
+    loadingDetails,
     setClickedMovie,
     handleClickBtnBack,
     handleClickedMovie,

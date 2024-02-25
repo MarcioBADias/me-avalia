@@ -12,6 +12,7 @@ const Main = ({ movie, inLoading }) => {
 
   const {
     clickedMovie,
+    loadingDetails,
     handleClickBtnBack,
     handleClickedMovie,
     handleClickRating,
@@ -31,11 +32,15 @@ const Main = ({ movie, inLoading }) => {
       </ListBox>
       <ListBox>
         {clickedMovie ? (
-          <MovieDetails
-            clickedMovie={clickedMovie}
-            onClickBtmBack={handleClickBtnBack}
-            onClickRating={handleClickRating}
-          />
+          loadingDetails ? (
+            <Loading />
+          ) : (
+            <MovieDetails
+              clickedMovie={clickedMovie}
+              onClickBtmBack={handleClickBtnBack}
+              onClickRating={handleClickRating}
+            />
+          )
         ) : (
           <>
             <button className="btn-toggle">-</button>
