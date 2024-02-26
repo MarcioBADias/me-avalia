@@ -9,4 +9,12 @@ const request = ({ url, onSuccess, onFinally }) => {
     .finally(onFinally)
 }
 
-export { baseUrl, request }
+const reduce = (state, action) =>
+  ({
+    set_movies: {
+      ...state,
+      movies: action.payload?.length > 0 ? action.payload : [],
+    },
+  })[action.type] || state
+
+export { baseUrl, request, reduce }

@@ -1,30 +1,31 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useReducer } from 'react'
+import { baseUrl, request, reduce } from '@/utils'
 import localforage from 'localforage'
-import { baseUrl, request } from '@/utils'
 
 const useMovies = () => {
-  const [movies, setMovies] = useState([])
+  const [state, dispatch] = useReducer(reduce, { movies: [], loading: false })
   const [loading, setLoading] = useState(false)
   const movieRef = useRef(null)
 
   useEffect(() => {
     movieRef.current.elements.searchMovie.value.length > 0 &&
       movieRef.current.reset()
-  }, [movies])
+  }, [state.movies])
 
   useEffect(() => {
     setLoading(true)
     request({
       url: `${baseUrl}&s=Matrix`,
       onSuccess: (data) =>
-        setMovies(
-          data.Search.map((movie) => ({
+        dispatch({
+          type: 'set_movies',
+          payload: data.Search.map((movie) => ({
             id: movie.imdbID,
             title: movie.Title,
             year: movie.Year,
             poster: movie.Poster,
           })),
-        ),
+        }),
       onFinally: () => setLoading(false),
     })
   }, [])
@@ -40,22 +41,25 @@ const useMovies = () => {
     request({
       url: `${baseUrl}&s=${searchMovie.value}`,
       onSuccess: (data) =>
-        setMovies(
-          data.Search.map((movie) => ({
+        dispatch({
+          type: 'set_movies',
+          payload: data.Search.map((movie) => ({
             id: movie.imdbID,
             title: movie.Title,
             year: movie.Year,
             poster: movie.Poster,
           })),
-        ),
+        }),
       onFinally: () => setLoading(false),
     })
 
     searchMovie.value = ''
   }
 
-  return { movies, loading, movieRef, handleSearchMovie }
+  return { movies: state.movies, loading, movieRef, handleSearchMovie }
 }
+
+//Quebra de componente--------------------------------------------------------------------------------------
 
 const useWatchedMovies = () => {
   const [wacthedMovies, setWacthedMovies] = useState([])
@@ -82,6 +86,8 @@ const useWatchedMovies = () => {
 
   return { wacthedMovies, setWacthedMovies, handleClickBtnDelete }
 }
+
+//Quebra de componente--------------------------------------------------------------------------------------
 
 const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
   const [clickedMovie, setClickedMovie] = useState(null)
@@ -136,5 +142,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
     handleClickRating,
   }
 }
+
+//Quebra de componente--------------------------------------------------------------------------------------
 
 export { useMovies, useWatchedMovies, useClickedMovie }
