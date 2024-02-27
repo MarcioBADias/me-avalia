@@ -1,32 +1,33 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useReducer } from 'react'
+import { baseUrl, request, reduce } from '@/utils'
 import localforage from 'localforage'
 
-const apiKey = import.meta.env.VITE_API_KEY
-const baseUrl = `https://www.omdbapi.com/?apikey=${apiKey}`
-
 const useMovies = () => {
-  const [movies, setMovies] = useState([])
+  const [state, dispatch] = useReducer(reduce, { movies: [], loading: false })
+  const [loading, setLoading] = useState(false)
   const movieRef = useRef(null)
 
   useEffect(() => {
     movieRef.current.elements.searchMovie.value.length > 0 &&
       movieRef.current.reset()
-  }, [movies])
+  }, [state.movies])
 
   useEffect(() => {
-    fetch(`${baseUrl}&s=Matrix`)
-      .then((r) => r.json())
-      .then((data) =>
-        setMovies(
-          data.Search.map((movie) => ({
+    setLoading(true)
+    request({
+      url: `${baseUrl}&s=Matrix`,
+      onSuccess: (data) =>
+        dispatch({
+          type: 'set_movies',
+          payload: data.Search.map((movie) => ({
             id: movie.imdbID,
             title: movie.Title,
             year: movie.Year,
             poster: movie.Poster,
           })),
-        ),
-      )
-      .catch((error) => alert(error.message))
+        }),
+      onFinally: () => setLoading(false),
+    })
   }, [])
 
   const handleSearchMovie = (e) => {
@@ -36,26 +37,29 @@ const useMovies = () => {
     if (searchMovie.value.length < 2) {
       return
     }
-
-    fetch(`${baseUrl}&s=${searchMovie.value}`)
-      .then((r) => r.json())
-      .then((data) =>
-        setMovies(
-          data.Search.map((movie) => ({
+    setLoading(true)
+    request({
+      url: `${baseUrl}&s=${searchMovie.value}`,
+      onSuccess: (data) =>
+        dispatch({
+          type: 'set_movies',
+          payload: data.Search.map((movie) => ({
             id: movie.imdbID,
             title: movie.Title,
             year: movie.Year,
             poster: movie.Poster,
           })),
-        ),
-      )
-      .catch((error) => alert(error.message))
+        }),
+      onFinally: () => setLoading(false),
+    })
 
     searchMovie.value = ''
   }
 
-  return { movies, movieRef, handleSearchMovie }
+  return { movies: state.movies, loading, movieRef, handleSearchMovie }
 }
+
+//Quebra de componente--------------------------------------------------------------------------------------
 
 const useWatchedMovies = () => {
   const [wacthedMovies, setWacthedMovies] = useState([])
@@ -83,8 +87,11 @@ const useWatchedMovies = () => {
   return { wacthedMovies, setWacthedMovies, handleClickBtnDelete }
 }
 
+//Quebra de componente--------------------------------------------------------------------------------------
+
 const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
   const [clickedMovie, setClickedMovie] = useState(null)
+  const [loadingDetails, setLoadingDetails] = useState(false)
 
   const handleClickBtnBack = () => setClickedMovie(null)
   const handleClickedMovie = (currentClickedMovie) => {
@@ -92,10 +99,10 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
     if (prevCLickedMove?.id === currentClickedMovie.id) {
       setClickedMovie(null)
     }
-
-    fetch(`${baseUrl}&i=${currentClickedMovie.id}`)
-      .then((r) => r.json())
-      .then((movie) =>
+    setLoadingDetails(true)
+    request({
+      url: `${baseUrl}&i=${currentClickedMovie.id}`,
+      onSuccess: (movie) =>
         setClickedMovie({
           id: movie.imdbID,
           title: movie.Title,
@@ -109,8 +116,8 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
           released: movie.Released,
           genre: movie.Genre,
         }),
-      )
-      .catch((error) => alert(error.message))
+      onFinally: setLoadingDetails(false),
+    })
   }
   const handleClickRating = (rating) => {
     setWacthedMovies((prev) => {
@@ -128,11 +135,14 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
 
   return {
     clickedMovie,
+    loadingDetails,
     setClickedMovie,
     handleClickBtnBack,
     handleClickedMovie,
     handleClickRating,
   }
 }
+
+//Quebra de componente--------------------------------------------------------------------------------------
 
 export { useMovies, useWatchedMovies, useClickedMovie }

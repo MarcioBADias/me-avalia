@@ -3,7 +3,7 @@ import { SearchMenu } from '@/components/SearchMenu'
 import { Main } from '@/components/Main'
 
 const App = () => {
-  const { movies, movieRef, handleSearchMovie } = useMovies()
+  const { movies, loading, movieRef, handleSearchMovie } = useMovies()
 
   return (
     <>
@@ -12,7 +12,7 @@ const App = () => {
         movies={movies}
         onSearchMovie={handleSearchMovie}
       />
-      <Main movie={movies} />
+      <Main movie={movies} inLoading={loading} />
     </>
   )
 }

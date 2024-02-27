@@ -4,13 +4,15 @@ import { ListBox } from '@/components/ListBox'
 import { MovieDetails } from '@/components/MovieDetails'
 import { MoviesList } from '@/components/MoviesList'
 import { useWatchedMovies, useClickedMovie } from '@/hooks'
+import { Loading } from '@/components/Loading'
 
-const Main = ({ movie }) => {
+const Main = ({ movie, inLoading }) => {
   const { wacthedMovies, setWacthedMovies, handleClickBtnDelete } =
     useWatchedMovies()
 
   const {
     clickedMovie,
+    loadingDetails,
     handleClickBtnBack,
     handleClickedMovie,
     handleClickRating,
@@ -19,16 +21,26 @@ const Main = ({ movie }) => {
   return (
     <main className="main">
       <ListBox>
-        <button className="btn-toggle">-</button>
-        <MoviesList movies={movie} onClickedMovie={handleClickedMovie} />
+        {inLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <button className="btn-toggle">-</button>
+            <MoviesList movies={movie} onClickedMovie={handleClickedMovie} />
+          </>
+        )}
       </ListBox>
       <ListBox>
         {clickedMovie ? (
-          <MovieDetails
-            clickedMovie={clickedMovie}
-            onClickBtmBack={handleClickBtnBack}
-            onClickRating={handleClickRating}
-          />
+          loadingDetails ? (
+            <Loading />
+          ) : (
+            <MovieDetails
+              clickedMovie={clickedMovie}
+              onClickBtmBack={handleClickBtnBack}
+              onClickRating={handleClickRating}
+            />
+          )
         ) : (
           <>
             <button className="btn-toggle">-</button>
