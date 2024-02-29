@@ -4,7 +4,6 @@ import localforage from 'localforage'
 
 const useMovies = () => {
   const [state, dispatch] = useReducer(reduce, { movies: [], loading: false })
-  const [loading, setLoading] = useState(false)
   const movieRef = useRef(null)
 
   useEffect(() => {
@@ -13,7 +12,7 @@ const useMovies = () => {
   }, [state.movies])
 
   useEffect(() => {
-    setLoading(true)
+    dispatch({ type: 'set_loading' })
     request({
       url: `${baseUrl}&s=Matrix`,
       onSuccess: (data) =>
@@ -26,7 +25,7 @@ const useMovies = () => {
             poster: movie.Poster,
           })),
         }),
-      onFinally: () => setLoading(false),
+      onFinally: () => dispatch({ type: 'set_loading' }),
     })
   }, [])
 
@@ -37,7 +36,7 @@ const useMovies = () => {
     if (searchMovie.value.length < 2) {
       return
     }
-    setLoading(true)
+    dispatch({ type: 'set_loading' })
     request({
       url: `${baseUrl}&s=${searchMovie.value}`,
       onSuccess: (data) =>
@@ -50,13 +49,18 @@ const useMovies = () => {
             poster: movie.Poster,
           })),
         }),
-      onFinally: () => setLoading(false),
+      onFinally: () => dispatch({ type: 'set_loading' }),
     })
 
     searchMovie.value = ''
   }
 
-  return { movies: state.movies, loading, movieRef, handleSearchMovie }
+  return {
+    movies: state.movies,
+    loading: state.loading,
+    movieRef,
+    handleSearchMovie,
+  }
 }
 
 //Quebra de componente--------------------------------------------------------------------------------------
