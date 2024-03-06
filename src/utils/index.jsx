@@ -15,6 +15,8 @@ const reduce = (state, action) =>
       ...state,
       movies: action.payload?.length > 0 ? action.payload : [],
     },
+    set_loading: { ...state, loading: !state.loading },
+    set_wacthedMovies: { ...state, wacthedMovies: action.payload }
   })[action.type] || state
 
 export { baseUrl, request, reduce }
