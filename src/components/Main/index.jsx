@@ -16,7 +16,7 @@ const Main = ({ movie, inLoading }) => {
     handleClickBtnBack,
     handleClickedMovie,
     handleClickRating,
-  } = useClickedMovie(wacthedMovies, setWacthedMovies)
+  } = useClickedMovie(setWacthedMovies)
 
   return (
     <main className="main">
@@ -31,16 +31,14 @@ const Main = ({ movie, inLoading }) => {
         )}
       </ListBox>
       <ListBox>
-        {clickedMovie ? (
-          loadingDetails ? (
-            <Loading />
-          ) : (
-            <MovieDetails
-              clickedMovie={clickedMovie}
-              onClickBtmBack={handleClickBtnBack}
-              onClickRating={handleClickRating}
-            />
-          )
+        {loadingDetails ? (
+          <Loading />
+        ) : clickedMovie ? (
+          <MovieDetails
+            clickedMovie={clickedMovie}
+            onClickBtmBack={handleClickBtnBack}
+            onClickRating={handleClickRating}
+          />
         ) : (
           <>
             <button className="btn-toggle">-</button>

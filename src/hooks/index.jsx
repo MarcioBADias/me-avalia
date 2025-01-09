@@ -102,6 +102,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
     const prevCLickedMove = clickedMovie
     if (prevCLickedMove?.id === currentClickedMovie.id) {
       setClickedMovie(null)
+      return
     }
     setLoadingDetails(true)
     request({
@@ -120,7 +121,7 @@ const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
           released: movie.Released,
           genre: movie.Genre,
         }),
-      onFinally: setLoadingDetails(false),
+      onFinally: () => setLoadingDetails(false),
     })
   }
   const handleClickRating = (rating) => {
