@@ -16,7 +16,7 @@ const Main = ({ movie, inLoading }) => {
     handleClickBtnBack,
     handleClickedMovie,
     handleClickRating,
-  } = useClickedMovie(setWacthedMovies)
+  } = useClickedMovie(wacthedMovies, setWacthedMovies)
 
   return (
     <main className="main">
