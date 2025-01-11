@@ -43,15 +43,17 @@ body {
   }
 
   .form-search {
+    flex-direction: column;
     width: 100%;
     margin: 1rem 0;
   }
 
+  .search {
+    max-width: 100%;
+  }
+
   .main {
     align-items: center;
-    flex-direction: column;
-  }
-  .details {
     flex-direction: column;
   }
 }

@@ -78,44 +78,54 @@ const useWatchedMovies = () => {
 //Quebra de componente--------------------------------------------------------------------------------------
 
 const useClickedMovie = (wacthedMovies, setWacthedMovies) => {
-  const [state, dispatch] = useState(reduce, {
-    clickedMovie: null,
-    loadingDetails: false,
-  })
+  const [clickedMovie, setClickedMovie] = useState(null)
+  const [loadingDetails, setLoadingDetails] = useState(false)
 
-  const handleClickBtnBack = () => dispatch({ type: 'disnissed_movie_detail' })
+  const handleClickBtnBack = () => setClickedMovie(null)
   const handleClickedMovie = (currentClickedMovie) => {
-    const prevCLickedMove = state.clickedMovie
+    const prevCLickedMove = clickedMovie
     if (prevCLickedMove?.id === currentClickedMovie.id) {
-      dispatch({ type: 'disnissed_movie_detail' })
+      setClickedMovie(null)
       return
     }
-    dispatch({ type: 'set_loading' })
+    setLoadingDetails(true)
     request({
       url: `${baseUrl}&i=${currentClickedMovie.id}`,
-      onSuccess: (movie) => dispatch({ type: 'clickedMovie', movie }),
-      onFinally: () => dispatch({ type: 'set_loading' }),
+      onSuccess: (movie) =>
+        setClickedMovie({
+          id: movie.imdbID,
+          title: movie.Title,
+          year: movie.Year,
+          imdbRate: movie.imdbRating,
+          runtime: movie.Runtime,
+          poster: movie.Poster,
+          plot: movie.Plot,
+          actors: movie.Actors,
+          director: movie.Director,
+          released: movie.Released,
+          genre: movie.Genre,
+        }),
+      onFinally: () => setLoadingDetails(false),
     })
   }
   const handleClickRating = (rating) => {
     setWacthedMovies((prev) => {
-      const duplicatedMove = prev.some(
-        (movie) => movie.id === state.clickedMovie.id,
-      )
+      const duplicatedMove = prev.some((movie) => movie.id === clickedMovie.id)
       return duplicatedMove
         ? prev.map((m) =>
-            m.id === state.clickedMovie.id
-              ? { ...state.clickedMovie, userRating: rating }
+            m.id === clickedMovie.id
+              ? { ...clickedMovie, userRating: rating }
               : m,
           )
-        : [...prev, { ...state.clickedMovie, userRating: rating }]
+        : [...prev, { ...clickedMovie, userRating: rating }]
     })
-    dispatch({ type: 'disnissed_movie_detail' })
+    setClickedMovie(null)
   }
 
   return {
-    clickedMovie: state.clickedMovie,
-    loadingDetails: state.loadingDetails,
+    clickedMovie,
+    loadingDetails,
+    setClickedMovie,
     handleClickBtnBack,
     handleClickedMovie,
     handleClickRating,
