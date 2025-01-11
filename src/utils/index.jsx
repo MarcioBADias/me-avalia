@@ -13,10 +13,15 @@ const reduce = (state, action) =>
   ({
     set_movies: {
       ...state,
-      movies: action.payload?.length > 0 ? action.payload : [],
+      movies: action.movies?.map((movie) => ({
+        id: movie.imdbID,
+        title: movie.Title,
+        year: movie.Year,
+        poster: movie.Poster,
+      })),
     },
     set_loading: { ...state, loading: !state.loading },
-    set_wacthedMovies: { ...state, wacthedMovies: action.payload }
+    set_wacthedMovies: { ...state, wacthedMovies: action.payload },
   })[action.type] || state
 
 export { baseUrl, request, reduce }
