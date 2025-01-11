@@ -9,6 +9,20 @@ const request = ({ url, onSuccess, onFinally }) => {
     .finally(onFinally)
 }
 
+const getMovie = (movie) => ({
+  id: movie.imdbID,
+  title: movie.Title,
+  year: movie.Year,
+  imdbRate: movie.imdbRating,
+  runtime: movie.Runtime,
+  poster: movie.Poster,
+  plot: movie.Plot,
+  actors: movie.Actors,
+  director: movie.Director,
+  released: movie.Released,
+  genre: movie.Genre,
+})
+
 const reduce = (state, action) =>
   ({
     set_movies: {
@@ -19,6 +33,11 @@ const reduce = (state, action) =>
         year: movie.Year,
         poster: movie.Poster,
       })),
+    },
+    dismissed_movie_details: { ...state, clickedMovie: null },
+    set_clicked_movie: {
+      ...state,
+      clickedMovie: action.movie && getMovie(action.movie),
     },
     set_loading: { ...state, loading: !state.loading },
     set_wacthedMovies: { ...state, wacthedMovies: action.payload },
