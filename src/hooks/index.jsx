@@ -16,15 +16,7 @@ const useMovies = () => {
     request({
       url: `${baseUrl}&s=Matrix`,
       onSuccess: (data) =>
-        dispatch({
-          type: 'set_movies',
-          payload: data.Search.map((movie) => ({
-            id: movie.imdbID,
-            title: movie.Title,
-            year: movie.Year,
-            poster: movie.Poster,
-          })),
-        }),
+        dispatch({ type: 'set_movies', movies: data.Search }),
       onFinally: () => dispatch({ type: 'set_loading' }),
     })
   }, [])
@@ -40,15 +32,7 @@ const useMovies = () => {
     request({
       url: `${baseUrl}&s=${searchMovie.value}`,
       onSuccess: (data) =>
-        dispatch({
-          type: 'set_movies',
-          payload: data.Search.map((movie) => ({
-            id: movie.imdbID,
-            title: movie.Title,
-            year: movie.Year,
-            poster: movie.Poster,
-          })),
-        }),
+        dispatch({ type: 'set_movies', movies: data.Search }),
       onFinally: () => dispatch({ type: 'set_loading' }),
     })
 
